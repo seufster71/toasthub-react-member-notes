@@ -2,44 +2,30 @@
 * Author Edward Seufert
 */
 'use-strict';
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as appPrefActions from '../../core/common/apppref-actions';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from "react-router-dom";
+
 import fuLogger from '../../core/common/fu-logger';
 import NotesView from '../../memberView/notes/notes-view';
+import BaseContainer from '../../core/container/base-container';
 
-class NotesContainer extends Component {
-	constructor(props) {
-		super(props);
+function NotesContainer() {
+	const itemState = useSelector((state) => state.notes);
+	const session = useSelector((state) => state.session);
+	const appPrefs = useSelector((state) => state.appPrefs);
+	const dispatch = useDispatch();
+	const location = useLocation();
+	const navigate = useNavigate();
 
-	}
+	useEffect(() => {
+		// dispatch(actions.init());
+	}, []);
 
-	componentDidMount() {
-		//this.props.actions.initMember();
-	}
-
-  render() {
-			fuLogger.log({level:'TRACE',loc:'NotesContainer::render',msg:"Hi there"});
-      return (
-				<NotesView/>
-			);
-  }
+	fuLogger.log({level:'TRACE',loc:'NotesContainer::render',msg:"Hi there"});
+    return (
+		<NotesView/>
+	);
 }
 
-NotesContainer.propTypes = {
-	appPrefs: PropTypes.object,
-	lang: PropTypes.string,
-	actions: PropTypes.object
-};
-
-function mapStateToProps(state, ownProps) {
-  return {lang:state.lang, appPrefs:state.appPrefs};
-}
-
-function mapDispatchToProps(dispatch) {
-  return { actions:bindActionCreators(appPrefActions,dispatch) };
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(NotesContainer);
+export default NotesContainer;
